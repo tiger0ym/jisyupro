@@ -24,7 +24,7 @@ int main(int argc,char **argv){
     return -1;
   }
   
-  time ( &timer_begin );
+  time (&timer_begin);
   for ( int i=0; i<nCount; i++ ) {
     Camera.grab();
     Camera.retrieve(src_img);
@@ -36,7 +36,7 @@ int main(int argc,char **argv){
   Camera.release();
   cvDestroyWindow("capture");
 
-  time ( &timer_end );
+  time (&timer_end);
   double secondsElapsed = difftime ( timer_end,timer_begin );
   cout<<  ( float ) ( ( float ) ( nCount ) /secondsElapsed ) <<endl;
   return 0;
