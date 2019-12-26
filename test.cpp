@@ -17,6 +17,15 @@ using namespace cv;
 #define PIN0 300
 #define PIN1 301
 
+#define target_x 320
+#define target_y 240
+
+#define KP_x -0.05
+#define KD_x -0.01
+#define KP_y 0.06
+#define KD_y 0.01
+#define delta_t 0.2
+
 int deg_to_value(int deg);
  
 int main(int argc,char **argv){
@@ -26,6 +35,7 @@ int main(int argc,char **argv){
   Camera.set( CV_CAP_PROP_FORMAT, CV_8UC1 );
   Camera.set( CV_CAP_PROP_FRAME_WIDTH, 640);
   Camera.set( CV_CAP_PROP_FRAME_HEIGHT, 480);
+  Camera.setRotation(2);
 
   //
   CascadeClassifier cascade;
@@ -53,10 +63,16 @@ int main(int argc,char **argv){
   }
 
   pca9685PWMReset(fd);
-  namedWindow("capture",CV_WINDOW_AUTOSIZE);
+  namedWindow("capture",CV_WINDOW_AUTOSIZE);///
   time (&timer_begin);
 
-  int degree = 0;
+  int degree_x = 0;
+  int diff0_x = 0;
+  int diff1_x = 0;
+
+  int degree_y = 0;
+  int diff0_y = 0;
+  int diff1_y = 0;
   
   for ( int i=0; i<nCount; i++ ) {
     //capture
@@ -89,27 +105,45 @@ int main(int argc,char **argv){
       int center_y = faces[face_id].y + faces[face_id].height/2;
       cout << center_x << " " << center_y << "     ";
 
-      float Kp = -0.05;
-      degree = int(Kp*(320 - center_x) + degree);
-      if(degree > 90){
-	degree = 90;
-      }else if(degree < -90){
-	degree = -90;
-      }
-      cout << degree << endl;
-      pwmWrite(PIN0,deg_to_value(degree));
       
-      rectangle(src_img,Point(faces[face_id].x,faces[face_id].y),Point(faces[face_id].x+faces[face_id].width,faces[face_id].y+faces[face_id].height),Scalar(0,0,255),3,CV_AA);
+      
+      //PID control
+          
+      diff0_x = diff1_x;
+      diff1_x = target_x - center_x;
+      degree_x = int(KP_x*diff1_x + KD_x*(diff1_x-diff0_x)/delta_t + degree_x);
+
+      diff0_y = diff1_y;
+      diff1_y = target_y - center_y;
+      degree_y = int(KP_y*diff1_y + KD_y*(diff1_y-diff0_y)/delta_t + degree_y);
+
+    
+      if(degree_x > 90){
+	degree_x = 90;
+      }else if(degree_x < -90){
+	degree_x = -90;
+      }
+      if(degree_y > 90){
+	degree_y = 90;
+      }else if(degree_y < -90){
+	degree_y = -90;
+      }
+      cout << degree_x << " " << degree_y << endl;
+      //pwmWrite(PIN0,deg_to_value(degree_x));
+      pwmWrite(PIN1,deg_to_value(degree_y));
+      
+      rectangle(src_img,Point(faces[face_id].x,faces[face_id].y),Point(faces[face_id].x+faces[face_id].width,faces[face_id].y+faces[face_id].height),Scalar(0,0,255),3,CV_AA);///
       
     }
-    imshow("capture",src_img);
+    imshow("capture",src_img);///
     
     if (cvWaitKey(1) >= 0){
       break;
     }
   }
   Camera.release();
-  cvDestroyWindow("capture");
+  pca9685PWMReset(fd);
+  cvDestroyWindow("capture");///
 
   time (&timer_end);
   double secondsElapsed = difftime ( timer_end,timer_begin );
