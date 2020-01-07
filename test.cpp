@@ -60,6 +60,7 @@ int main(int argc,char **argv){
   //
   if(fd < 0){
     cerr << "Error setting up the motor" << endl;
+    return -1;
   }
 
   pca9685PWMReset(fd);
@@ -129,8 +130,8 @@ int main(int argc,char **argv){
 	degree_y = -90;
       }
       cout << degree_x << " " << degree_y << endl;
-      //pwmWrite(PIN0,deg_to_value(degree_x));
-      pwmWrite(PIN1,deg_to_value(degree_y));
+      pwmWrite(PIN0,deg_to_value(degree_x));
+      //pwmWrite(PIN1,deg_to_value(degree_y));
       
       rectangle(src_img,Point(faces[face_id].x,faces[face_id].y),Point(faces[face_id].x+faces[face_id].width,faces[face_id].y+faces[face_id].height),Scalar(0,0,255),3,CV_AA);///
       
