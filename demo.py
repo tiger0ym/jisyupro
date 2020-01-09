@@ -16,26 +16,29 @@ while True:
     while (res.find('\n.') == -1):
         res += str(sock.recv(1024),'utf-8')
 
+    #get information of word    
     word = ''
     for line in res.split('\n'):
-        # search word
         index = line.find('WORD=')
-        
-        #put word into variable "word"
         if index != -1:
             line = line[index + 6 : line.find('"', index + 6)]
-            if line != '[s]':
+            if (line != '[s]' and line != '[/s]') :
                 word = word + line
 
-        #
-        if word == 'こんにちは':
-            #subprocess.call("aplay cat15.wav",shell=True)
-            print("hello")
-
-        #
-        if word == 'こんばんは':
-            #subprocess.call("aplay cat15.wav",shell=True)
-            print("good evenig")
-
+    #get information of reliability
+    cm = True
+    for line in res.split('\n'):
+        index = line.find('CM=')
+        if index != -1:
+            line = line[index + 4 : line.find('"', index + 4)]
+            if line != '1.000':
+                cm = False
+   
+    
+    if(word == 'こんにちは' and cm):
+        subprocess.call("mplayer -ao alsa:device=bt-receiver ~/Desktop/jisyupro/sound/cat3a.mp3",shell=True)
         
-        res = ''
+    
+            
+    res = ''
+        

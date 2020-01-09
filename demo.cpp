@@ -1,4 +1,3 @@
-#include <ctime>
 #include <iostream>
 #include <raspicam/raspicam_cv.h>
 #include <vector>
@@ -22,7 +21,7 @@ using namespace cv;
 
 #define KP_x -0.05
 #define KD_x -0.005
-#define KP_y 0.06
+#define KP_y 0.05
 #define KD_y 0.01
 #define delta_t 0.2
 
@@ -44,10 +43,6 @@ int main(int argc,char **argv){
   Mat src_img;
 
   //
-  int nCount=100;
-  time_t timer_begin,timer_end;
-
-  //
   wiringPiSetup();
   int fd = pca9685Setup(PIN_BASE, 0x40,HERTZ);
   
@@ -63,10 +58,6 @@ int main(int argc,char **argv){
     return -1;
   }
 
-  //pca9685PWMReset(fd);
-  //namedWindow("capture",CV_WINDOW_AUTOSIZE);///
-  time (&timer_begin);
-
   int degree_x = 0;
   int diff0_x = 0;
   int diff1_x = 0;
@@ -75,7 +66,7 @@ int main(int argc,char **argv){
   int diff0_y = 0;
   int diff1_y = 0;
   
-  for ( int i=0; i<nCount; i++ ) {
+  while(true) {
     //capture
     Camera.grab();
     Camera.retrieve(src_img);
@@ -87,7 +78,7 @@ int main(int argc,char **argv){
     
     //when no faces are detected
     if(faces.size() == 0){
-      cout << "searching for faces..." << endl;
+      //cout << "searching for faces..." << endl;
       //degree = 0;
       //pwmWrite(PIN0,deg_to_value(degree));
     }
@@ -104,12 +95,11 @@ int main(int argc,char **argv){
       
       int center_x = faces[face_id].x + faces[face_id].width/2;
       int center_y = faces[face_id].y + faces[face_id].height/2;
-      cout << center_x << " " << center_y << "     ";
+      //cout << center_x << " " << center_y << endl;
 
       
       
-      //PID control
-          
+      //PD control
       diff0_x = diff1_x;
       diff1_x = target_x - center_x;
       degree_x = int(KP_x*diff1_x + KD_x*(diff1_x-diff0_x)/delta_t + degree_x);
@@ -129,14 +119,11 @@ int main(int argc,char **argv){
       }else if(degree_y < -90){
 	degree_y = -90;
       }
-      cout << degree_x << " " << degree_y << endl;
       pwmWrite(PIN0,deg_to_value(degree_x));
       pwmWrite(PIN1,deg_to_value(degree_y));
       
-      //rectangle(src_img,Point(faces[face_id].x,faces[face_id].y),Point(faces[face_id].x+faces[face_id].width,faces[face_id].y+faces[face_id].height),Scalar(0,0,255),3,CV_AA);///
       
     }
-    //imshow("capture",src_img);///
     
     if (cvWaitKey(1) >= 0){
       break;
@@ -144,11 +131,7 @@ int main(int argc,char **argv){
   }
   Camera.release();
   pca9685PWMReset(fd);
-  //cvDestroyWindow("capture");///
 
-  time (&timer_end);
-  double secondsElapsed = difftime ( timer_end,timer_begin );
-  cout<<  ( float ) ( ( float ) ( nCount ) /secondsElapsed ) <<endl;
   return 0;
 }
 
