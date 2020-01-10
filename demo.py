@@ -31,14 +31,78 @@ while True:
         index = line.find('CM=')
         if index != -1:
             line = line[index + 4 : line.find('"', index + 4)]
-            if line != '1.000':
+            if float(line) < 0.97:
                 cm = False
-   
-    
+
+
+    print(word)
+    print(cm)
     if(word == 'こんにちは' and cm):
-        subprocess.call("mplayer -ao alsa:device=bt-receiver ~/Desktop/jisyupro/sound/cat3a.mp3",shell=True)
-        
+        subprocess.call("mplayer -ao alsa:device=bt-receiver ~/Desktop/jisyupro/sound/pleasure.mp3",shell=True)
+
+    if(word == 'おはよう' and cm):
+        subprocess.call("mplayer -ao alsa:device=bt-receiver ~/Desktop/jisyupro/sound/pleasure.mp3",shell=True)
+
+    if(word == 'ありがとう' and cm):
+        subprocess.call("mplayer -ao alsa:device=bt-receiver ~/Desktop/jisyupro/sound/pleasure.mp3",shell=True)
+
+    if(word == 'ごめんね' and cm):
+        subprocess.call("mplayer -ao alsa:device=bt-receiver ~/Desktop/jisyupro/sound/pleasure.mp3",shell=True)
     
+    if(word == 'いなばせんせい' and cm):
+        subprocess.call("mplayer -ao alsa:device=bt-receiver ~/Desktop/jisyupro/sound/cat.mp3",shell=True)
+
+    if(word == 'おかだせんせい' and cm):
+        subprocess.call("mplayer -ao alsa:device=bt-receiver ~/Desktop/jisyupro/sound/cat.mp3",shell=True)
+
+    if(word == 'かんざきせんせい' and cm):
+        subprocess.call("mplayer -ao alsa:device=bt-receiver ~/Desktop/jisyupro/sound/cat.mp3",shell=True)
+
+    if(word == 'くずおかせんせい' and cm):
+        subprocess.call("mplayer -ao alsa:device=bt-receiver ~/Desktop/jisyupro/sound/cat.mp3",shell=True)
+
+    if(word == 'くによしせんせい' and cm):
+        subprocess.call("mplayer -ao alsa:device=bt-receiver ~/Desktop/jisyupro/sound/cat.mp3",shell=True)
+
+    if(word == 'なかむらせんせい' and cm):
+        subprocess.call("mplayer -ao alsa:device=bt-receiver ~/Desktop/jisyupro/sound/cat.mp3",shell=True)
+
+    if(word == 'はらだせんせい' and cm):
+        subprocess.call("mplayer -ao alsa:device=bt-receiver ~/Desktop/jisyupro/sound/cat.mp3",shell=True)
+
+    if(word == 'ひろせせんせい' and cm):
+        subprocess.call("mplayer -ao alsa:device=bt-receiver ~/Desktop/jisyupro/sound/cat.mp3",shell=True)
+
+    if(word == 'たかはしせんせい' and cm):
+        subprocess.call("mplayer -ao alsa:device=bt-receiver ~/Desktop/jisyupro/sound/cat.mp3",shell=True)
+
+    if(word == 'なるみせんせい' and cm):
+        subprocess.call("mplayer -ao alsa:device=bt-receiver ~/Desktop/jisyupro/sound/cat.mp3",shell=True)
+
+    if(word == 'にいやませんせい' and cm):
+        subprocess.call("mplayer -ao alsa:device=bt-receiver ~/Desktop/jisyupro/sound/cat.mp3",shell=True)
+
+    if(word == 'もりもとせんせい' and cm):
+        subprocess.call("mplayer -ao alsa:device=bt-receiver ~/Desktop/jisyupro/sound/cat.mp3",shell=True)
+
+    if(word == 'やまもとせんせい' and cm):
+        subprocess.call("mplayer -ao alsa:device=bt-receiver ~/Desktop/jisyupro/sound/cat.mp3",shell=True)
+
+    if(word == 'じしゅぷろ' and cm):
+        subprocess.call("mplayer -ao alsa:device=bt-receiver ~/Desktop/jisyupro/sound/thread.mp3",shell=True)
+
+    if(word == 'かだい' and cm):
+        subprocess.call("mplayer -ao alsa:device=bt-receiver ~/Desktop/jisyupro/sound/thread.mp3",shell=True)
+
+    if(word == 'れぽーと' and cm):
+        subprocess.call("mplayer -ao alsa:device=bt-receiver ~/Desktop/jisyupro/sound/thread.mp3",shell=True)
+
+    if(word == 'しけん' and cm):
+        subprocess.call("mplayer -ao alsa:device=bt-receiver ~/Desktop/jisyupro/sound/thread.mp3",shell=True)
+
+    if(word == 'ばか' and cm):
+        subprocess.call("mplayer -ao alsa:device=bt-receiver ~/Desktop/jisyupro/sound/sad.mp3",shell=True)
+        subprocess.call("./depressed",shell=True)
             
     res = ''
         

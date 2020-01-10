@@ -71,10 +71,27 @@ int main(int argc,char **argv){
     Camera.grab();
     Camera.retrieve(src_img);
 
+    Point2f center = Point2f(static_cast<float>(src_img.cols/2),static_cast<float>(src_img.rows/2));
+    Mat affine;
+
     //face detection
     cascade.detectMultiScale(src_img,faces,1.1,3,0,Size(80,80));
 
+    if(faces.size() == 0){
+      getRotationMatrix2D(center,10,1).copyTo(affine);
+      warpAffine(src_img,src_img,affine,src_img.size(),INTER_CUBIC);
+    
+      //face detection
+      cascade.detectMultiScale(src_img,faces,1.1,3,0,Size(80,80));
 
+      if(faces.size() == 0){
+	getRotationMatrix2D(center,-20,1).copyTo(affine);
+	warpAffine(src_img,src_img,affine,src_img.size(),INTER_CUBIC);
+    
+	//face detection
+	cascade.detectMultiScale(src_img,faces,1.1,3,0,Size(80,80));
+      }
+    }
     
     //when no faces are detected
     if(faces.size() == 0){

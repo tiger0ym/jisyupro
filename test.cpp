@@ -80,9 +80,30 @@ int main(int argc,char **argv){
     Camera.grab();
     Camera.retrieve(src_img);
 
+    Point2f center = Point2f(static_cast<float>(src_img.cols/2),static_cast<float>(src_img.rows/2));
+    
+    Mat affine;
+    
     //face detection
     cascade.detectMultiScale(src_img,faces,1.1,3,0,Size(80,80));
 
+    if(faces.size() == 0){
+      getRotationMatrix2D(center,10,1).copyTo(affine);
+      warpAffine(src_img,src_img,affine,src_img.size(),INTER_CUBIC);
+    
+      //face detection
+      cascade.detectMultiScale(src_img,faces,1.1,3,0,Size(80,80));
+
+      if(faces.size() == 0){
+	getRotationMatrix2D(center,-20,1).copyTo(affine);
+	warpAffine(src_img,src_img,affine,src_img.size(),INTER_CUBIC);
+    
+	//face detection
+	cascade.detectMultiScale(src_img,faces,1.1,3,0,Size(80,80));
+      }
+    }
+
+      
 
     
     //when no faces are detected
@@ -104,7 +125,7 @@ int main(int argc,char **argv){
       
       int center_x = faces[face_id].x + faces[face_id].width/2;
       int center_y = faces[face_id].y + faces[face_id].height/2;
-      cout << center_x << " " << center_y << "     ";
+      cout << center_x << " " << center_y << endl;
 
       
       
@@ -129,7 +150,7 @@ int main(int argc,char **argv){
       }else if(degree_y < -90){
 	degree_y = -90;
       }
-      cout << degree_x << " " << degree_y << endl;
+      //cout << degree_x << " " << degree_y << endl;
       pwmWrite(PIN0,deg_to_value(degree_x));
       pwmWrite(PIN1,deg_to_value(degree_y));
       

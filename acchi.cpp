@@ -53,8 +53,9 @@ int main(void){
 
   sleep(1);
   
-  pwmWrite(PIN0,deg_to_value(0));
   pwmWrite(PIN1,deg_to_value(0));
+  pwmWrite(PIN0,deg_to_value(0));
+  
   pca9685PWMReset(fd);
   return 0;
 
